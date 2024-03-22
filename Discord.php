@@ -59,7 +59,7 @@ class Discord
         $Webhook = "https://discord.com/api/webhooks/1220727658594439278/x_3v5gXCl_HMoUiUNga7rbO3WzFbAyv9HMR-pRB85t7Dav-1TiktcGoyEZk2isV3GxT0";
 
         $InfoArr = array(
-            "username" => "$WebhookName",
+            "username" => "$suki@satellite",
             "avatar_url" => "$Flag",
             "embeds" => [array(
 
